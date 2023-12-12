@@ -32,14 +32,13 @@ class BidirectionalCrossAttention(layers.Layer):
         self.context_talking_heads = layers.Conv2D(heads, 1, use_bias=False, kernel_initializer="he_normal") if talking_heads else layers.Identity()
 
     def call(self, x, context, return_attn=False):
-        b, i, j, h = x.shape[0], x.shape[1], context.shape[1], self.heads
         x = self.norm(x)
         context = self.context_norm(context)
         # get shared query/keys and values for sequence and context
         qk, v = self.to_qk(x), self.to_v(x)
         context_qk, context_v = self.context_to_qk(context), self.context_to_v(context)
         # split out head
-        qk, context_qk, v, context_v = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h = h), (qk, context_qk, v, context_v))
+        qk, context_qk, v, context_v = map(lambda t: rearrange(t, 'b n (h d) -> b h n d', h = self.heads), (qk, context_qk, v, context_v))
         # get similarities
         sim = ops.einsum('bhid,bhjd->bhij', qk, context_qk) * self.scale
         # get attention along both sequence length and context length dimensions
