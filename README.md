@@ -1,7 +1,7 @@
 ## Bidirectional Cross Attention in Keras 3 
 
 
-Converted from Phil Wang's implementation [here](https://github.com/lucidrains/bidirectional-cross-attention)
+Ported from Phil Wang's implementation [here](https://github.com/lucidrains/bidirectional-cross-attention)
 
 A simple cross attention that updates both the source and target in one step. The key insight is that one can do <a href="https://arxiv.org/abs/2001.04451">shared query / key attention</a> and use the attention matrix twice to update both ways. 
 
