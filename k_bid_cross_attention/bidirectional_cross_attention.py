@@ -28,26 +28,26 @@ class BidirectionalCrossAttention(layers.Layer):
         self.dropout = layers.Dropout(dropout)
         self.context_dropout = layers.Dropout(dropout)
         self.to_qk = layers.Dense(
-            inner_dim, use_bias=False, kernel_initializer="he_normal"
+            inner_dim, use_bias=False
         )
         self.context_to_qk = layers.Dense(
-            inner_dim, use_bias=False, kernel_initializer="he_normal"
+            inner_dim, use_bias=False
         )
         self.to_v = layers.Dense(
-            inner_dim, use_bias=False, kernel_initializer="he_normal"
+            inner_dim, use_bias=False
         )
         self.context_to_v = layers.Dense(
-            inner_dim, use_bias=False, kernel_initializer="he_normal"
+            inner_dim, use_bias=False
         )
         self.to_out = layers.Dense(dim)
         self.context_to_out = layers.Dense(context_dim)
         self.talking_heads = (
-            layers.Conv2D(heads, 1, use_bias=False, kernel_initializer="he_normal")
+            layers.Conv2D(heads, 1, use_bias=False)
             if talking_heads
             else layers.Identity()
         )
         self.context_talking_heads = (
-            layers.Conv2D(heads, 1, use_bias=False, kernel_initializer="he_normal")
+            layers.Conv2D(heads, 1, use_bias=False)
             if talking_heads
             else layers.Identity()
         )
