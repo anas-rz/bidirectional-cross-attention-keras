@@ -36,6 +36,6 @@ assert audio_out.shape == audio.shape
 
 ## Todo
 
-- [ ] Test initial implementation with all backends
+- [X] Test initial implementation with all backends
 - [ ] Add masking
 - [ ] PyPI release
