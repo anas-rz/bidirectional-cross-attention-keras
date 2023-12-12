@@ -73,11 +73,12 @@ class BidirectionalCrossAttention(layers.Layer):
         attn = self.dropout(attn)
         context_attn = self.context_dropout(context_attn)
         # talking heads
-        attn = self.talking_heads(attn)
-        context_attn = self.context_talking_heads(context_attn)
+
+        attn = self.talking_heads(rearrange(attn, 'b h n d -> b n d h')) # channels_last
+        context_attn = self.context_talking_heads(rearrange(context_attn, 'b h n d -> b n d h')) # channels_last
         # src sequence aggregates values from context, context aggregates values from src sequence
-        out = ops.einsum("bhij,bhjd->bhid", attn, context_v)
-        context_out = ops.einsum("bhji,bhjd->bhid", context_attn, v)
+        out = ops.einsum("bijh,bhjd->bhid", attn, context_v)
+        context_out = ops.einsum("bjih,bhjd->bhid", context_attn, v)
         # merge heads and combine out
         out, context_out = map(
             lambda t: rearrange(t, "b h n d -> b n (h d)"), (out, context_out)
